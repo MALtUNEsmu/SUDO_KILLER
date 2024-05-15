@@ -307,10 +307,6 @@ Version 3 of `SUDO_KILLER` now includes a list of tools that can be used to achi
 - $\color{#f0a015}\large{\textsf{SK-su-BruteForce.sh:}}$ Perform password bruteforce or password spray for a specific user via sudo.
 - $\color{#f0a015}\large{\textsf{SK-search-sudoers.sh:}}$ Perform an identification of possible sudoers backup files on the current host.
 
-```shell
-
-
-```
 
 <details open>
 <summary>
