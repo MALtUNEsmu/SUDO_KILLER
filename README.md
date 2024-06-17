@@ -1,5 +1,5 @@
 ![Static Badge](https://img.shields.io/badge/Version-3.0.1-blue)
-[![Last Commit](https://img.shields.io/github/last-commit/TH3xACE/SUDO_KILLER?style=plastic)](https://img.shields.io/github/last-commit/TH3xACE/SUDO_KILLER?style=plastic)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/TH3xACE/SUDO_KILLER/V3)
 ![Static Badge](https://img.shields.io/badge/Maintain-Yes-purple)
 ![Static Badge](https://img.shields.io/badge/Author-TH3xACE-red)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/TH3xACE/SUDO_KILLER/)
@@ -15,9 +15,6 @@
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=blue)](https://www.linkedin.com/in/adblais)
 
  :bulb: Best Viewed in Dark Mode :)
-
-
-:wrench::wrench::wrench::wrench: WORK IN PROGRESS - Not officially Launch
 
 
 - [ Intro ](#intro)
@@ -56,7 +53,7 @@ Below is a list of checks that are perform by `SUDO_KILLER`
 - Binaries that might be replaced
 - Identify missing scripts
 
-> **Warning**
+> [!WARNING]
 > The check list above is NOT exhaustive.
 
 <a name="usage"></a>
@@ -78,11 +75,11 @@ Optional arguments:
 -s : supply user password for sudo checks (If sudo rules is not accessible without current user's password) </br>
 -h : help
 
-> **Note**
+> [!NOTE]
 > It is worth noting that when using the -c argument, two types of check are provided one for which the CVE identified is solely based on the current sudo version being used and another where the requirements are also checked.
 > Very often, a sudo version might be vulnerable but some pre-requisites might be needed for a successful exploitation.
 
-> **Note**
+> [!NOTE]
 > Providing password: If you need to input a password to run sudo -l then the script will not work if you don't provide a password with the argument -s.
 
 <a name="docker"></a>
@@ -96,7 +93,7 @@ A range of Docker containers is made available to offer a deliberately vulnerabl
 
 ```shell
 service docker start 
-docker pull th3xace/sudo_killer_demo
+docker pull th3xace/sudo_killer_demo3
 docker run --rm -it th3xace/sudo_killer_demo3
 ```
 ```shell
@@ -105,6 +102,15 @@ service docker start
 docker pull th3xace/sudo_killer_demo2
 docker run --user 1000 --rm -it th3xace/sudo_killer_demo2
 ```
+
+## Why is it possible to run "sudo -l" without a password?
+
+By default, if the NOPASSWD tag is applied to any of the entries for a user on a host, you will be able to run "sudo -l" without a password. This behavior may be overridden via the verifypw and listpw options.
+
+However, these rules only affect the current user, so if user impersonation is possible (using su) sudo -l should be launched from this user as well.
+
+Sometimes the file /etc/sudoers can be read even if sudo -l is not accessible without password.
+
 
 <a name="scenarios"></a>
 ## Scenarios
@@ -128,14 +134,16 @@ Scenario 7: [18] Dangerous binaries (gtfobins)
 Scenario 8: [19] Recursive Impersonation test
 Scenario 9: [20] Environment Path Hijacking
 Scenario 10: [21] App Specific sudo vuln/misconfig
+Scenario 11: [5] Excessive permissions (Authentication required)
+Scenario 12: [16] Backdooring sudo (Credentials Capture)
 ```
 
 <a name="videos"></a>
 ## Videos - Demo 
 
-The playlist can be found here: https://www.youtube.com/watch?v=Q8iO9mYrfv8&list=PLQPKPAuCA40FMpMKWZLxQydLe7rPL5bml
+The playlist can be found here: [https://www.youtube.com/watch?v=Q8iO9mYrfv8&list=PLQPKPAuCA40FMpMKWZLxQydLe7rPL5bml](https://www.youtube.com/watch?v=VjXiLhmOmHs&list=PLQPKPAuCA40ERFDNZ-Ub58SgGHGKAcr26)
 
-> **Important**:
+> [!IMPORTANT]
 > Quick videos on how to properly do the testing on the provided docker.
 
 <details open>
@@ -144,12 +152,12 @@ The playlist can be found here: https://www.youtube.com/watch?v=Q8iO9mYrfv8&list
 </summary> <br />
     
 <p align="center">
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-      <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK/Slide1.PNG" alt="apis"/>
+   <a href="#">  
+      <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide1.JPG" alt="apis"/>
    </a>
 &nbsp;
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-      <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK/Slide2.PNG" alt="apis"/>
+   <a href="https://youtu.be/VjXiLhmOmHs">  
+      <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide2.JPG" alt="apis"/>
    </a>
 </p>
 
@@ -158,7 +166,7 @@ The playlist can be found here: https://www.youtube.com/watch?v=Q8iO9mYrfv8&list
 </p>    
 </details>
 
-> **Warning**:
+> [!WARNING]
 > The video list below is not exhaustive, to have access to all the videos, please check the playlist link.
 
 <details open>
@@ -167,30 +175,65 @@ The playlist can be found here: https://www.youtube.com/watch?v=Q8iO9mYrfv8&list
 </summary> <br />
     
 <p align="center">
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK/sk1.png" alt="apis"/>
+   <a href="https://youtu.be/rg6FxPuP8sQ">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide3.JPG" alt="apis"/>
    </a>
 &nbsp;
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK/sk1.png" alt="apis"/>
+   <a href="https://youtu.be/BBtoBrZdAKk">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide9.JPG" alt="apis"/>
    </a>
 </p>
 
 <p align="center">
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK/sk1.png" alt="apis"/>
+   <a href="https://youtu.be/XiLsS9v3hy8">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide10.JPG" alt="apis"/>
    </a>
 &nbsp;
-    <a href="https://youtu.be/Q8iO9mYrfv8">  
-     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK/sk1.png" alt="apis"/>
+    <a href="https://youtu.be/eBfIotMsDiI">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide11.JPG" alt="apis"/>
    </a>
 </p> 
-    
+
 <p align="center">
-    <img width="39%" src="https://github.com/amplication/amplication/assets/73097785/a51e166b-07ec-4c80-99ed-8792a81c4064.png" alt="own-your-code"/>
+   <a href="https://youtu.be/a68dAmgeJnA">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide12.JPG" alt="apis"/>
+   </a>
 &nbsp;
-    <img width="39%" src="https://github.com/amplication/amplication/assets/73097785/1cca9721-b8d6-425b-a1a9-d10d3cdcc9b8.png" alt="customize-code"/>
-</p>
+    <a href="https://youtu.be/CILd01m2GBs">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide13.JPG" alt="apis"/>
+   </a>
+</p> 
+
+<p align="center">
+   <a href="https://youtu.be/4xectsHBfCQ">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide14.JPG" alt="apis"/>
+   </a>
+&nbsp;
+    <a href="https://youtu.be/11q5pzGJxvk">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide15.JPG" alt="apis"/>
+   </a>
+</p> 
+
+<p align="center">
+   <a href="https://youtu.be/BbPBxXy4rKY">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide16.JPG" alt="apis"/>
+   </a>
+&nbsp;
+    <a href="https://youtu.be/sfkxoR2a99o">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide17.JPG" alt="apis"/>
+   </a>
+</p> 
+
+<p align="center">
+   <a href="https://youtu.be/SV2KPd4CA8A">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide18.JPG" alt="apis"/>
+   </a>
+&nbsp;
+    <a href="https://youtu.be/6Lt-wKZmH9c">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide19.JPG" alt="apis"/>
+   </a>
+</p> 
+
     
 </details>
 
@@ -199,35 +242,36 @@ The playlist can be found here: https://www.youtube.com/watch?v=Q8iO9mYrfv8&list
 
 <details open>
 <summary>
-  (click to expand) Recent sudo CVEs that SUDO_KILLER detects (including pre-requisites): 
+  (click to expand) CVEs related to SUDO that SUDO_KILLER detects (including pre-requisites): 
 </summary> <br />
 
 <p align="center">
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-     <img width="35%" src="https://github.com/TH3xACE/res/blob/main/SK/Slide17.png" alt="apis"/>
+   <a href="https://youtu.be/THS_bn4MOQY">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide4.JPG" alt="apis"/>
    </a>
 &nbsp;
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-     <img width="35%" src="https://github.com/TH3xACE/res/blob/main/SK/Slide4.PNG" alt="apis"/>
+    <a href="https://youtu.be/6VkZaj3FDiE">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide5.JPG" alt="apis"/>
    </a>
-</p>
+</p> 
 
 <p align="center">
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-     <img width="35%" src="https://github.com/TH3xACE/res/blob/main/SK/Slide5.PNG" alt="apis"/>
+   <a href="https://youtu.be/LhqbExt5oq0">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide7.JPG" alt="apis"/>
    </a>
 &nbsp;
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-     <img width="35%" src="https://github.com/TH3xACE/res/blob/main/SK/Slide6.PNG" alt="apis"/>
+    <a href="https://youtu.be/AJSSRrGt-Dw">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide8.JPG" alt="apis"/>
    </a>
-</p>
+</p> 
 
 <p align="center">
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-     <img width="35%" src="https://github.com/TH3xACE/res/blob/main/SK/Slide7.PNG" alt="apis"/>
+   <a href="https://youtu.be/elwGRlN7aCI">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide6.JPG" alt="apis"/>
    </a>
 &nbsp;
-</p>
+</p> 
+
 
 </details>
 
@@ -237,49 +281,32 @@ The playlist can be found here: https://www.youtube.com/watch?v=Q8iO9mYrfv8&list
 </summary> <br />
 
 <p align="center">
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-     <img width="33%" src="https://github.com/TH3xACE/res/blob/main/SK/Slide17.png" alt="apis"/>
+   <a href="https://youtu.be/CP0S_7aZHxA">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide27.JPG" alt="apis"/>
    </a>
 &nbsp;
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-     <img width="33%" src="https://github.com/TH3xACE/res/blob/main/SK/Slide4.PNG" alt="apis"/>
-   </a>
-&nbsp;
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-     <img width="33%" src="https://github.com/TH3xACE/res/blob/main/SK/Slide5.PNG" alt="apis"/>
-   </a>
-&nbsp;
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-     <img width="33%" src="https://github.com/TH3xACE/res/blob/main/SK/Slide7.PNG" alt="apis"/>
-   </a>
+    
+</p> 
 
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-     <img width="33%" src="https://github.com/TH3xACE/res/blob/main/SK/Slide6.PNG" alt="apis"/>
-   </a>
-&nbsp;
 
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-     <img width="33%" src="https://github.com/TH3xACE/res/blob/main/SK/Slide6.PNG" alt="apis"/>
-   </a>
-&nbsp;
-</p>
 
 </details>
 
 
 <a name="sk-tools"></a>
 ## SK-Tools
-Version 3 of `SUDO_KILLER` now includes a list of tools that can be used to achieve several tasks. The scripts are located at `SUDO_KILLERv3/SK-Tools`
+Version 3 of `SUDO_KILLER` now includes a list of tools that can be used to achieve several tasks. The scripts are located at `SUDO_KILLERv3/SUDO_KILLER/SK-Tools/`
 
-- $\color{cyan}\large{\textsf{SK-ImperBruteForce.sh:}}$ Perform an impersonation bruteforce using users from /etc/passwd, starting from user with uid 1000.
-- $\color{cyan}\large{\textsf{SK-credHarvest2.sh:}}$ Perform a credential capture by creating a fake sudo via alias then re-direct to real sudo.
-- $\color{cyan}\large{\textsf{SK-app-check.sh:}}$ Perform check of sudo vulnerabilities related to a specifc third-party app or device or programming lang [still in progress].
-- $\color{cyan}\large{\textsf{SK-ttyInject.sh:}}$ Abusing TTY pushback so that if the user root su - on a controlled user we make him run an arbitrary command.
-- $\color{cyan}\large{\textsf{SK-recursive-impersonate.sh:}}$ Perform identification of recursive impersonation with a default depth of 3.
-- $\color{cyan}\large{\textsf{SK-alias-report.sh:}}$ Perform search on alias with different criteria.
-- $\color{cyan}\large{\textsf{SK-csuid-with-sudo.sh:}}$ Perform identification of custom suid binary then check whether sudo command is run without full path.
-- $\color{cyan}\large{\textsf{SK-su-BruteForce.sh:}}$ Perform password bruteforce or password spray for a specific user via sudo.
-- $\color{cyan}\large{\textsf{SK-search-sudoers.sh:}}$ Perform an identification of possible sudoers backup files on the current host.
+- $\color{#f0a015}\large{\textsf{SK-ImperBruteForce-NoPwd.sh:}}$ Perform an impersonation bruteforce using users from /etc/passwd, starting from user with uid 1000.
+- $\color{#f0a015}\large{\textsf{SK-credHarvest2.sh:}}$ Perform a credential capture by creating a fake sudo via alias then re-direct to real sudo.
+- $\color{#f0a015}\large{\textsf{SK-app-check.sh:}}$ Perform check of sudo vulnerabilities related to a specifc third-party app or device or programming lang [still in progress].
+- $\color{#f0a015}\large{\textsf{SK-ttyInject.sh:}}$ Abusing TTY pushback so that if the user root su - on a controlled user we make him run an arbitrary command.
+- $\color{#f0a015}\large{\textsf{SK-recursive-impersonate.sh:}}$ Perform identification of recursive impersonation with a default depth of 3.
+- $\color{#f0a015}\large{\textsf{SK-alias-report.sh:}}$ Perform search on alias with different criteria.
+- $\color{#f0a015}\large{\textsf{SK-csuid-with-sudo.sh:}}$ Perform identification of custom suid binary then check whether sudo command is run without full path.
+- $\color{#f0a015}\large{\textsf{SK-su-BruteForce.sh:}}$ Perform password bruteforce or password spray for a specific user via sudo.
+- $\color{#f0a015}\large{\textsf{SK-search-sudoers.sh:}}$ Perform an identification of possible sudoers backup files on the current host.
+
 
 <details open>
 <summary>
@@ -287,29 +314,123 @@ Version 3 of `SUDO_KILLER` now includes a list of tools that can be used to achi
 </summary> <br />
     
 <p align="center">
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-      <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK/Slide1.PNG" alt="apis"/>
+   <a href="https://youtu.be/Oc1yuploiME">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide20.JPG" alt="apis"/>
    </a>
 &nbsp;
-   <a href="https://youtu.be/Q8iO9mYrfv8">  
-      <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK/Slide2.PNG" alt="apis"/>
+    <a href="https://youtu.be/aoofrCyb6KA">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide21.JPG" alt="apis"/>
    </a>
-</p>
+</p> 
 
-<p></p>
+<p align="center">
+   <a href="https://youtu.be/gUDuZVwVWyU">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide22.JPG" alt="apis"/>
+   </a>
+&nbsp;
+    <a href="https://youtu.be/7VqNCgYvEa0">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide23.JPG" alt="apis"/>
+   </a>
+</p> 
 
-</p>    
+<p align="center">
+   <a href="https://youtu.be/AG1o6s4dEF0">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide24.JPG" alt="apis"/>
+   </a>
+&nbsp;
+    <a href="https://youtu.be/woF68JmJ33c">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide25.JPG" alt="apis"/>
+   </a>
+</p> 
+
+<p align="center">
+   <a href="https://youtu.be/R3_u-G5AyUw">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide26.JPG" alt="apis"/>
+   </a>
+&nbsp;
+    <a href="https://youtu.be/Vpr00SxIVgo">  
+     <img width="39%" src="https://github.com/TH3xACE/res/blob/main/SK3/Slide28.JPG" alt="apis"/>
+   </a>
+</p> 
+
 </details>
 
 </br>
 
-## Why is it possible to run "sudo -l" without a password?
+## Capturing Credentials via sudo redirect (SK-credHarvest2.sh)
+The script SK-credHarvest2.sh from SK-Tools allow to perform a credential capture by creating a fake sudo via alias then re-direct to real sudo. Actually works only for bash (not working/implemented for ZSH or else for now)configured linux.
 
-By default, if the NOPASSWD tag is applied to any of the entries for a user on a host, you will be able to run "sudo -l" without a password. This behavior may be overridden via the verifypw and listpw options.
+The displayed message when asking for credential when using sudo differs from the version being used. It is possible to choose between two options (differ based on OS version).
+Example of the displayed message (new and old)
 
-However, these rules only affect the current user, so if user impersonation is possible (using su) sudo -l should be launched from this user as well.
+> [!TIP]
+> (new) [sudo] password for user: <br />
+> (old) Password: 
 
-Sometimes the file /etc/sudoers can be read even if sudo -l is not accessible without password.
+For All Users (auser):
+When you have root privilege or excessive rights on users' home and you want an easy way to gather credentials:
+```shell
+./SK-credHarvest2.sh auser <new|old> ; source /home/*/.bashrc
+```
+For the currrent user (cuser):
+```shell
+./SK-credHarvest2.sh cuser <new|old> ; source /home/<currentuser>/.bashrc
+```
+> [!CAUTION]
+> TO STOP the credential harvesting: run the same script again with same argument
+
+output: the log /tmp/sk-crds.log will contains the credentials
+
+
+## Alias' Audit (SK-alias-report.sh)
+You will either need root privilege, access to a backup of sudoers or read access to /etc/sudoers.
+
+```shell
+Usage: ./SK-alias-sudoers.sh -p <sudoers_path> -k <keyword> [-u] [-r] [-m] [-c] | [-a]
+  where -u: user | -r: runas | -m: host | -c: command | -a: all
+```
+
+## Bruteforce/Password Spray via su (SK-su-BruteForce.sh) 
+Using su to bruteforce password and password spray with concurrency, timeout and sleep. 
+
+```shell
+Usage: ./SK-su-BruteForce.sh [-h|--help] [-m|--module MODULE] [-u|--user USER|-uf|--userfile USERFILE] [-p|--password PASSWORD|-pf|--pwdfile PASSFILE] [-c|--concurrent CONCURRENT] [-s|--sleep SLEEP] [-t|--timeouts TIMEOUTS]
+
+Module: Password Bruteforce : pwdbf
+Example: ./SK-su-BruteForce.sh -m "pwdbf" -u user -pf password.txt -c 5 -s 0.005 -t 0.9
+
+Module: Password Spray : pwdspr
+Example: ./SK-su-BruteForce.sh -m pwdspr -uf users.txt -p password -c 5 -s 0.005 -t 0.9 
+
+Module: User:Password Bruteforce : usrpwdbf
+Example: ./SK-su-BruteForce.sh -m usrpwdbf -uf users-pwd.txt  -c 5 -s 0.005 -t 0.9 
+```
+
+## Search for backup of the file sudoers (SK-search-sudoers.sh)
+Find possible sudoers backup files in /mnt/ /opt/ /etc/ /etc/ /home/ /app*/  and any additional one parse as argument
+
+```shell
+Usage: ./SK-search-sudoers.sh /tmp/
+```
+
+## Update dangerous bins - GTFOBINS (SK_dbins_update.sh) 
+To update the dangerous bins, go to dbins/update and run ./SK_dbins_update.sh. Make sure you have internet connection.
+
+```shell
+Usage: ./SK_dbins_update.sh
+```
+
+## Binary Relative Path (SK-relative-path.sh)
+Looking for binaries with relative path that be abused! if there is no secure_path set.
+
+```shell
+sudo -l
+<..snip..>
+(root) SETENV: NOPASSWD: /opt/support/purge.sh
+<..snip..>
+
+Usage: ./SK-relative-path.sh /opt/support/purge.sh
+```
 
 
 <a name="contribute"></a>

